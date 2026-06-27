@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="apple-touch-icon" href="/images/home2.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Island Games" />
+    <meta name="theme-color" content="#ffcc00" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Adventure Island 1 Games</title>
+    <style>
+      :root {
+        --jungle-deep: #2f9e7b;
+        --jungle: #61c9a8;
+        --jungle-light: #a3e2c9;
+        --bark: #2307fa;
+        --bark-dark: #f4930b;
+
+        --white: #fffdf8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100dvh;
+        overflow: hidden;
+        background: linear-gradient(to bottom, #6593f6, #08328c);
+
+        font-family: "Trebuchet MS", "Verdana", sans-serif;
+      }
+
+      /* decorative */
+      .leaf {
+        position: absolute;
+        font-size: clamp(30px, 6vw, 60px);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .leaf1 {
+        top: 2%;
+        left: 2%;
+      }
+      .leaf2 {
+        top: 1%;
+        right: 2%;
+      }
+      .leaf3 {
+        top: 8%;
+        left: 45%;
+      }
+      /* layout */
+      .wrap {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100dvh;
+        padding: max(6px, env(safe-area-inset-top, 6px))
+          max(12px, env(safe-area-inset-right, 12px))
+          max(8px, env(safe-area-inset-bottom, 8px))
+          max(12px, env(safe-area-inset-left, 12px));
+        gap: 0;
+      }
+
+      /* header */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        padding: 6px 0 10px;
+      }
+      h1 {
+        font-family: "Chalkboard SE", "Comic Sans MS", cursive, sans-serif;
+        font-size: clamp(18px, 4.5vw, 48px);
+        color: #f4930b;
+        -webkit-text-stroke: 2px #fae207;
+        white-space: nowrap;
+        text-align: center;
+      }
+
+      /* grid */
+      .grid {
+        flex: 1;
+        display: grid;
+        gap: clamp(6px, 1.5vw, 14px);
+        min-height: 0;
+        /* portrait default: 5 columns, 7 rows */
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(7, 1fr);
+      }
+
+      /* landscape iPad: 7 columns, 5 rows */
+      @media (orientation: landscape) and (min-width: 927px) {
+        .grid {
+          grid-template-columns: repeat(7, 1fr);
+          grid-template-rows: repeat(5, 1fr);
+        }
+      }
+      /* unit buttons */
+      .unit-btn {
+        width: 100%;
+        height: 100%;
+        background: var(--bark);
+        color: #fad607;
+        border: 3px solid darkblue;
+        border-radius: clamp(10px, 2vw, 18px);
+        font-family: "Chalkboard SE", "Comic Sans MS", cursive, sans-serif;
+        font-size: clamp(16px, 3.5vw, 34px);
+        font-weight: bold;
+        cursor: pointer;
+        -webkit-text-stroke: 1px var(--bark-dark);
+        /* remove -webkit-text-stroke */
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .unit-btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 var(--bark-dark);
+      }
+
+      /* rotate message */
+      .rotate-msg {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(to bottom, #bde55d, #4f7831);
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        z-index: 100;
+      }
+      .rotate-msg p {
+        font-family: "Chalkboard SE", "Comic Sans MS", cursive;
+        font-size: clamp(18px, 4vw, 28px);
+        color: var(--white);
+        text-align: center;
+        padding: 0 20px;
+      }
+      .title-wrap {
+        position: relative;
+        display: inline-block;
+      }
+
+      .title-icon {
+        position: absolute;
+        top: 50%;
+        width: clamp(16px, 3vw, 30px);
+        height: auto;
+        transform: translateY(-50%);
+      }
+
+      .title-icon-left {
+        right: 100%;
+        margin-right: 10px;
+      }
+
+      .title-icon-right {
+        left: 100%;
+        margin-left: 10px;
+      }
+      @media (orientation: landscape) and (max-width: 926px) {
+        .wrap,
+        .overlay {
+          display: none;
+        }
+        .rotate-msg {
+          display: flex;
+        }
+      }
+
+      @media (orientation: portrait) {
+        .rotate-msg {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rotate-msg">
+      <p>🔄 Please rotate your device to portrait mode!</p>
+    </div>
+
+    <div class="wrap">
+      <div class="header">
+        <div class="title-wrap">
+          <img src="images/sh1.png" class="title-icon title-icon-left" alt="" />
+          <h1>Adventure Island 1</h1>
+          <img
+            src="images/kh1.png"
+            class="title-icon title-icon-right"
+            alt=""
+          />
+        </div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <script>
+      const UNITS = [
+        { label: "Unit 1", url: "unit1.html", color: "darkgray" },
+        { label: "Unit 2", url: "unit2.html", color: "yellow" },
+        { label: "Unit 3", url: "unit3.html", color: "yellow" },
+        { label: "Unit 4", url: "unit4.html", color: "yellow" },
+        { label: "Unit 5", url: "unit5.html", color: "yellow" },
+        { label: "Unit 6", url: "unit6.html", color: "yellow" },
+        { label: "Unit 7", url: "unit7.html", color: "yellow" },
+        { label: "Unit 8", url: "unit8.html", color: "darkorange" },
+        { label: "Unit 9", url: "unit9.html", color: "darkgray" },
+        { label: "Unit 10", url: "unit10.html", color: "#07C1FA" },
+        { label: "Unit 11", url: "unit11.html", color: "#07C1FA" },
+        { label: "Unit 12", url: "unit12.html", color: "#07C1FA" },
+        { label: "Unit 13", url: "unit13.html", color: "#07C1FA" },
+        { label: "Unit 14", url: "unit14.html", color: "darkblue" },
+        { label: "Unit 15", url: "unit15.html", color: "darkgray" },
+        { label: "Unit 16", url: "unit16.html", color: "0BCD04" },
+        { label: "Unit 17", url: "unit17.html", color: "#0BCD04" },
+        { label: "Unit 18", url: "unit18.html", color: "#0BCD04" },
+        { label: "Unit 19", url: "unit19.html", color: "#0BCD04" },
+        { label: "Unit 20", url: "unit20.html", color: "#1a7a1a" },
+        { label: "Unit 21", url: "unit21.html", color: "darkgray" },
+        { label: "Unit 22", url: "unit22.html", color: "#f5a0c0" },
+        { label: "Unit 23", url: "unit23.html", color: "#f5a0c0" },
+        { label: "Unit 24", url: "unit24.html", color: "#f5a0c0" },
+        { label: "Unit 25", url: "unit25.html", color: "#A0031D" },
+        { label: "Unit 26", url: "unit26.html", color: "darkgray" },
+        { label: "Unit 27", url: "unit27.html", color: "#7de8e8" },
+        { label: "Unit 28", url: "unit28.html", color: "#7de8e8" },
+        { label: "Unit 29", url: "unit29.html", color: "#7de8e8" },
+        { label: "Unit 30", url: "unit30.html", color: "#01463F" },
+        { label: "Unit 31", url: "unit31.html", color: "darkgray" },
+        { label: "Unit 32", url: "unit32.html", color: "#f57a7a" },
+        { label: "Unit 33", url: "unit33.html", color: "#f57a7a" },
+        { label: "Unit 34", url: "unit34.html", color: "#b71c1c" },
+      ];
+
+      UNITS.forEach((unit) => {
+        const a = document.createElement("a");
+        a.className = "unit-btn";
+        a.href = unit.url;
+        a.textContent = unit.label;
+        a.style.color = "#fad607"; // all labels same yellow
+        if (unit.color) a.style.backgroundColor = unit.color; // btn face = old color
+        grid.appendChild(a);
+      });
+    </script>
+  </body>
+</html>
