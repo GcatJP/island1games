@@ -171,11 +171,12 @@
       }
 
       /* grid fills remaining space */
+
       .grid {
         flex: 1;
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
         gap: clamp(5px, 1.5vw, 12px);
         min-height: 0;
       }
@@ -254,7 +255,7 @@
       .face-front .word {
         font-family: "Chalkboard SE", "Comic Sans MS", cursive;
         font-weight: bold;
-        font-size: clamp(20px, 14vw, 60px);
+        font-size: clamp(20px, 16vw, 80px);
         color: var(--ocean-deep);
         text-align: center;
         line-height: 1.1;
@@ -403,7 +404,7 @@
 
       <div class="header">
         <a class="reset-btn" href="index.html">⬅️ Back</a>
-        <h1>Unit 34</h1>
+        <h1>Unit 21</h1>
         <button class="reset-btn" id="resetBtn">Play Again 🐠</button>
       </div>
       <div class="grid" id="grid"></div>
@@ -421,21 +422,12 @@
     <script>
       /* ---- PAIRS — replace with your real image paths / words ---- */
       const PAIRS = [
-        { img: "images/cat.png", word: "cat" },
-        { img: "images/pen.png", word: "pen" },
-        { img: "images/six.png", word: "six" },
-        { img: "images/box.png", word: "box" },
-        { img: "images/bug.png", word: "bug" },
-        { img: "images/fan.png", word: "fan" },
-        { img: "images/web.png", word: "web" },
-        { img: "images/pin.png", word: "pin" },
-        { img: "images/s.png", word: "sun" },
-        { img: "images/hand.png", word: "hand" },
-        { img: "images/deskpng", word: "desk" },
-        { img: "images/swim.png", word: "swim" },
-        { img: "images/pink.png", word: "pink" },
-        { img: "images/frog.png", word: "frog" },
-        { img: "images/drum.png", word: "drum" },
+        { img: "images/1p.png", word: "1 pen" },
+        { img: "images/2p.png", word: "2 pens" },
+        { img: "images/3p.png", word: "3 pens" },
+        { img: "images/4p.png", word: "4 pens" },
+        { img: "images/5p.png", word: "5 pens" },
+        { img: "images/f1.png", word: "1 fish" },
       ];
 
       /* ---- audio ---- */
