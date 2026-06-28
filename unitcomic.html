@@ -171,11 +171,12 @@
       }
 
       /* grid fills remaining space */
+
       .grid {
         flex: 1;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
         gap: clamp(5px, 1.5vw, 12px);
         min-height: 0;
       }
@@ -254,7 +255,7 @@
       .face-front .word {
         font-family: "Chalkboard SE", "Comic Sans MS", cursive;
         font-weight: bold;
-        font-size: clamp(10px, 5vw, 40px);
+        font-size: clamp(20px, 10vw, 50px);
         color: var(--ocean-deep);
         text-align: center;
         line-height: 1.1;
@@ -403,7 +404,7 @@
 
       <div class="header">
         <a class="reset-btn" href="index.html">⬅️ Back</a>
-        <h1>Unit 9</h1>
+        <h1>Comic</h1>
         <button class="reset-btn" id="resetBtn">Play Again 🐠</button>
       </div>
       <div class="grid" id="grid"></div>
@@ -411,7 +412,7 @@
 
     <div class="overlay" id="overlay">
       <div class="win-card">
-        <div class="win-emojis">🐠 Great! 🐡</div>
+        <div class="win-emojis">🐡 Great! 🐠</div>
         <h2>You found all the treasure!</h2>
         <p id="winStats">Adventure Island</p>
         <button class="reset-btn" id="playAgainBtn">Play Again 🌴</button>
@@ -421,14 +422,12 @@
     <script>
       /* ---- PAIRS — replace with your real image paths / words ---- */
       const PAIRS = [
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
-        { img: "images/.png", img2: "images/.png" },
+        { img: "images/c1.png", word: "It's a cat." },
+        { img: "images/c2.png", word: "Is it a pen?" },
+        { img: "images/c3.png", word: "No, it's a fox." },
+        { img: "images/c4.png", word: "I see a pink pig." },
+        { img: "images/c5.png", word: "I swim in the sea." },
+        { img: "images/c6.png", word: "Stop!" },
       ];
 
       /* ---- audio ---- */
@@ -484,7 +483,7 @@
         let cards = [];
         PAIRS.forEach((p, idx) => {
           cards.push({ pairId: idx, type: "image", value: p.img });
-          cards.push({ pairId: idx, type: "image2", value: p.img2 });
+          cards.push({ pairId: idx, type: "word", value: p.word });
         });
         for (let i = cards.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -510,7 +509,7 @@
 
           const front = document.createElement("div");
           front.className = "face face-front";
-          if (card.type === "image" || card.type === "image2") {
+          if (card.type === "image") {
             const img = document.createElement("img");
             img.src = card.value;
             img.alt = "";
