@@ -120,13 +120,13 @@
         height: 100%;
         background: var(--bark);
         color: #fad607;
-        border: 3px solid darkblue;
+        border: 2px solid #f4930b;
         border-radius: clamp(10px, 2vw, 18px);
         font-family: "Chalkboard SE", "Comic Sans MS", cursive, sans-serif;
-        font-size: clamp(16px, 3.5vw, 34px);
+        font-size: clamp(16px, 5vw, 45px);
         font-weight: bold;
         cursor: pointer;
-        -webkit-text-stroke: 1px var(--bark-dark);
+
         /* remove -webkit-text-stroke */
         transition:
           transform 0.1s,
@@ -222,40 +222,41 @@
 
     <script>
       const UNITS = [
-        { label: "Unit 1", url: "unit1.html", color: "darkgray" },
-        { label: "Unit 2", url: "unit2.html", color: "yellow" },
-        { label: "Unit 3", url: "unit3.html", color: "yellow" },
-        { label: "Unit 4", url: "unit4.html", color: "yellow" },
-        { label: "Unit 5", url: "unit5.html", color: "yellow" },
-        { label: "Unit 6", url: "unit6.html", color: "yellow" },
-        { label: "Unit 7", url: "unit7.html", color: "yellow" },
-        { label: "Unit 8", url: "unit8.html", color: "darkorange" },
-        { label: "Unit 9", url: "unit9.html", color: "darkgray" },
-        { label: "Unit 10", url: "unit10.html", color: "#07C1FA" },
-        { label: "Unit 11", url: "unit11.html", color: "#07C1FA" },
-        { label: "Unit 12", url: "unit12.html", color: "#07C1FA" },
-        { label: "Unit 13", url: "unit13.html", color: "#07C1FA" },
-        { label: "Unit 14", url: "unit14.html", color: "darkblue" },
-        { label: "Unit 15", url: "unit15.html", color: "darkgray" },
-        { label: "Unit 16", url: "unit16.html", color: "#0BCD04" },
-        { label: "Unit 17", url: "unit17.html", color: "#0BCD04" },
-        { label: "Unit 18", url: "unit18.html", color: "#0BCD04" },
-        { label: "Unit 19", url: "unit19.html", color: "#0BCD04" },
-        { label: "Unit 20", url: "unit20.html", color: "#1a7a1a" },
-        { label: "Unit 21", url: "unit21.html", color: "darkgray" },
-        { label: "Unit 22", url: "unit22.html", color: "#f5a0c0" },
-        { label: "Unit 23", url: "unit23.html", color: "#f5a0c0" },
-        { label: "Unit 24", url: "unit24.html", color: "#f5a0c0" },
-        { label: "Unit 25", url: "unit25.html", color: "#A0031D" },
-        { label: "Unit 26", url: "unit26.html", color: "darkgray" },
-        { label: "Unit 27", url: "unit27.html", color: "#7de8e8" },
-        { label: "Unit 28", url: "unit28.html", color: "#7de8e8" },
-        { label: "Unit 29", url: "unit29.html", color: "#7de8e8" },
-        { label: "Unit 30", url: "unit30.html", color: "#01463F" },
-        { label: "Unit 31", url: "unit31.html", color: "darkgray" },
-        { label: "Unit 32", url: "unit32.html", color: "#f57a7a" },
-        { label: "Unit 33", url: "unit33.html", color: "#f57a7a" },
-        { label: "Unit 34", url: "unit34.html", color: "#b71c1c" },
+        { label: "1", url: "unit1.html", color: "darkgray" },
+        { label: "2", url: "unit2.html", color: "yellow" },
+        { label: "3", url: "unit3.html", color: "yellow" },
+        { label: "4", url: "unit4.html", color: "yellow" },
+        { label: "5", url: "unit5.html", color: "yellow" },
+        { label: "6", url: "unit6.html", color: "yellow" },
+        { label: "7", url: "unit7.html", color: "yellow" },
+        { label: "8", url: "unit8.html", color: "darkorange" },
+        { label: "9", url: "unit9.html", color: "darkgray" },
+        { label: "10", url: "unit10.html", color: "#07C1FA" },
+        { label: "11", url: "unit11.html", color: "#07C1FA" },
+        { label: "12", url: "unit12.html", color: "#07C1FA" },
+        { label: "13", url: "unit13.html", color: "#07C1FA" },
+        { label: "14", url: "unit14.html", color: "darkblue" },
+        { label: "15", url: "unit15.html", color: "darkgray" },
+        { label: "16", url: "unit16.html", color: "#0BCD04" },
+        { label: "17", url: "unit17.html", color: "#0BCD04" },
+        { label: "18", url: "unit18.html", color: "#0BCD04" },
+        { label: "19", url: "unit19.html", color: "#0BCD04" },
+        { label: "20", url: "unit20.html", color: "#1a7a1a" },
+        { label: "21", url: "unit21.html", color: "darkgray" },
+        { label: "22", url: "unit22.html", color: "#f5a0c0" },
+        { label: "23", url: "unit23.html", color: "#f5a0c0" },
+        { label: "24", url: "unit24.html", color: "#f5a0c0" },
+        { label: "25", url: "unit25.html", color: "#A0031D" },
+        { label: "26", url: "unit26.html", color: "darkgray" },
+        { label: "27", url: "unit27.html", color: "#7de8e8" },
+        { label: "28", url: "unit28.html", color: "#7de8e8" },
+        { label: "29", url: "unit29.html", color: "#7de8e8" },
+        { label: "30", url: "unit30.html", color: "#01463F" },
+        { label: "31", url: "unit31.html", color: "darkgray" },
+        { label: "32", url: "unit32.html", color: "#f57a7a" },
+        { label: "33", url: "unit33.html", color: "#f57a7a" },
+        { label: "34", url: "unit34.html", color: "#b71c1c" },
+        { label: "comic", url: "unit35.html", color: "darkgray" },
       ];
 
       UNITS.forEach((unit) => {
@@ -263,8 +264,8 @@
         a.className = "unit-btn";
         a.href = unit.url;
         a.textContent = unit.label;
-        a.style.color = "#fad607"; // all labels same yellow
-        if (unit.color) a.style.backgroundColor = unit.color; // btn face = old color
+        a.style.color = unit.color || "#fad607"; // label = stated color, fallback yellow
+        // background no longer overridden — all buttons stay the default blue from CSS
         grid.appendChild(a);
       });
     </script>

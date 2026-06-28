@@ -423,11 +423,11 @@
       /* ---- PAIRS — replace with your real image paths / words ---- */
       const PAIRS = [
         { img: "images/a.png", word: "a" },
-        { img: "images/pink.png", word: "pink" },
-        { img: "images/h.png", word: "h" },
-        { img: "images/10.png", word: "t" },
+        { img: "images/c.png", word: "c" },
+        { img: "images/h.png", word: "h", group: "h" },
+        { img: "images/.png", word: "t" },
         { img: "images/cat.png", word: "cat" },
-        { img: "images/hat.png", word: "hat" },
+        { img: "images/hat.png", word: "hat", group: "h" },
       ];
 
       /* ---- audio ---- */
@@ -482,8 +482,9 @@
       function buildDeck() {
         let cards = [];
         PAIRS.forEach((p, idx) => {
-          cards.push({ pairId: idx, type: "image", value: p.img });
-          cards.push({ pairId: idx, type: "word", value: p.word });
+          const id = p.group !== undefined ? p.group : idx;
+          cards.push({ pairId: id, type: "image", value: p.img });
+          cards.push({ pairId: id, type: "word", value: p.word });
         });
         for (let i = cards.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
