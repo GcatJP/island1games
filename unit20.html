@@ -171,12 +171,11 @@
       }
 
       /* grid fills remaining space */
-
       .grid {
         flex: 1;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(3, 1fr);
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(5, 1fr);
         gap: clamp(5px, 1.5vw, 12px);
         min-height: 0;
       }
@@ -255,7 +254,7 @@
       .face-front .word {
         font-family: "Chalkboard SE", "Comic Sans MS", cursive;
         font-weight: bold;
-        font-size: clamp(20px, 16vw, 80px);
+        font-size: clamp(20px, 14vw, 60px);
         color: var(--ocean-deep);
         text-align: center;
         line-height: 1.1;
@@ -404,7 +403,7 @@
 
       <div class="header">
         <a class="reset-btn" href="index.html">⬅️ Back</a>
-        <h1>Unit 3</h1>
+        <h1>Unit 20</h1>
         <button class="reset-btn" id="resetBtn">Play Again 🐠</button>
       </div>
       <div class="grid" id="grid"></div>
@@ -420,212 +419,213 @@
     </div>
 
     <script>
-          /* ---- PAIRS — replace with your real image paths / words ---- */
-          const PAIRS = [
-            { img: "images/a.png", word: "a" },
-            { img: "images/c.png", word: "c" },
-            { img: "images/h.png", word: "h", group: "h" },
-            { img: "images/.png", word: "t" },
-            { img: "images/cat.png", word: "cat" },
-            { img: "images/hat.png", word: "hat", group: "h" },
-          ];
+      /* ---- PAIRS — replace with your real image paths / words ---- */
+      const PAIRS = [
+        { img: "images/i.png", word: "i" },
+        { img: "images/s.png", word: "s" },
+        { img: "images/x.png", word: "x" },
+        { img: "images/t.png", word: "t" },
+        { img: "images/k.png", word: "k" },
+        { img: "images/d.png", word: "d" },
+        { img: "images/z.png", word: "z" },
+        { img: "images/e.png", word: "e" },
+        { img: "images/w.png", word: "w" },
+        { img: "images/sit.png", word: "sit" },
+        { img: "images/six.png", word: "six" },
+        { img: "images/pin.png", word: "pin" },
+        { img: "images/pig.png", word: "pig" },
+        { img: "images/kid.png", word: "kid" },
+        { img: "images/kid.png", word: "zip" },
+      ];
 
-          /* ---- audio ---- */
-          let audioCtx = null;
-          function getCtx() {
-            if (!audioCtx)
-              audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            return audioCtx;
-          }
-          if (flippedCards.length === 2) {
-      tries++;
+      /* ---- audio ---- */
+      let audioCtx = null;
+      function getCtx() {
+        if (!audioCtx)
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+      }
+      function playTone(freq, startTime, duration, gainPeak) {
+        const ctx = getCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(gainPeak, startTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        osc.start(startTime);
+        osc.stop(startTime + duration + 0.02);
+      }
+      function playMatchJingle() {
+        const ctx = getCtx(),
+          now = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
+          playTone(f, now + i * 0.09, 0.22, 0.22),
+        );
+      }
+      function playWrongSound() {
+        const ctx = getCtx(),
+          now = ctx.currentTime;
+        playTone(220, now, 0.18, 0.12);
+        playTone(196, now + 0.08, 0.18, 0.1);
+      }
+      function playWinFanfare() {
+        const ctx = getCtx(),
+          now = ctx.currentTime;
+        [523.25, 523.25, 659.25, 783.99, 1046.5, 1318.51].forEach((f, i) =>
+          playTone(f, now + [0, 0.15, 0.3, 0.45, 0.6, 0.8][i], 0.3, 0.22),
+        );
+      }
 
-      locked = true;
-      const [a, b] = flippedCards;
-      if (a.card.pairId === b.card.pairId && a.card.type !== b.card.type) {
+      /* ---- game state ---- */
+      let deck = [],
+        flippedCards = [],
+        matches = 0,
+        tries = 0,
+        locked = false;
 
-          function playTone(freq, startTime, duration, gainPeak) {
-            const ctx = getCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = "triangle";
-            osc.frequency.value = freq;
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            gain.gain.setValueAtTime(0, startTime);
-            gain.gain.linearRampToValueAtTime(gainPeak, startTime + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-            osc.start(startTime);
-            osc.stop(startTime + duration + 0.02);
-          }
-          function playMatchJingle() {
-            const ctx = getCtx(),
-              now = ctx.currentTime;
-            [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
-              playTone(f, now + i * 0.09, 0.22, 0.22),
-            );
-          }
-          function playWrongSound() {
-            const ctx = getCtx(),
-              now = ctx.currentTime;
-            playTone(220, now, 0.18, 0.12);
-            playTone(196, now + 0.08, 0.18, 0.1);
-          }
-          function playWinFanfare() {
-            const ctx = getCtx(),
-              now = ctx.currentTime;
-            [523.25, 523.25, 659.25, 783.99, 1046.5, 1318.51].forEach((f, i) =>
-              playTone(f, now + [0, 0.15, 0.3, 0.45, 0.6, 0.8][i], 0.3, 0.22),
-            );
-          }
+      function buildDeck() {
+        let cards = [];
+        PAIRS.forEach((p, idx) => {
+          cards.push({ pairId: idx, type: "image", value: p.img });
+          cards.push({ pairId: idx, type: "word", value: p.word });
+        });
+        for (let i = cards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+        return cards;
+      }
 
-          /* ---- game state ---- */
-          let deck = [],
-            flippedCards = [],
-            matches = 0,
-            tries = 0,
-            locked = false;
+      function render() {
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+        deck.forEach((card, i) => {
+          const el = document.createElement("div");
+          el.className = "card";
+          el.dataset.index = i;
 
-          function buildDeck() {
-            let cards = [];
-            PAIRS.forEach((p, idx) => {
-              const id = p.group !== undefined ? p.group : idx;
-              cards.push({ pairId: id, type: "image", value: p.img });
-              cards.push({ pairId: id, type: "word", value: p.word });
-            });
-            for (let i = cards.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [cards[i], cards[j]] = [cards[j], cards[i]];
-            }
-            return cards;
-          }
+          const inner = document.createElement("div");
+          inner.className = "card-inner";
 
-          function render() {
-            const grid = document.getElementById("grid");
-            grid.innerHTML = "";
-            deck.forEach((card, i) => {
-              const el = document.createElement("div");
-              el.className = "card";
-              el.dataset.index = i;
+          const back = document.createElement("div");
+          back.className = "face face-back";
+          back.textContent = i + 1;
 
-              const inner = document.createElement("div");
-              inner.className = "card-inner";
-
-              const back = document.createElement("div");
-              back.className = "face face-back";
-              back.textContent = i + 1;
-
-              const front = document.createElement("div");
-              front.className = "face face-front";
-              if (card.type === "image") {
-                const img = document.createElement("img");
-                img.src = card.value;
-                img.alt = "";
-                front.appendChild(img);
-              } else {
-                const span = document.createElement("div");
-                span.className = "word";
-                span.textContent = card.value;
-                front.appendChild(span);
-              }
-
-              inner.appendChild(back);
-              inner.appendChild(front);
-              el.appendChild(inner);
-              el.addEventListener("click", () => onCardClick(el, card));
-              grid.appendChild(el);
-            });
+          const front = document.createElement("div");
+          front.className = "face face-front";
+          if (card.type === "image") {
+            const img = document.createElement("img");
+            img.src = card.value;
+            img.alt = "";
+            front.appendChild(img);
+          } else {
+            const span = document.createElement("div");
+            span.className = "word";
+            span.textContent = card.value;
+            front.appendChild(span);
           }
 
-          function onCardClick(el, card) {
-            getCtx();
-            if (locked) return;
-            if (locked) return;
-            if (
-              el.classList.contains("flipped") ||
-              el.classList.contains("matched")
-            )
-              return;
-            if (flippedCards.length === 2) return;
+          inner.appendChild(back);
+          inner.appendChild(front);
+          el.appendChild(inner);
+          el.addEventListener("click", () => onCardClick(el, card));
+          grid.appendChild(el);
+        });
+      }
 
-            el.classList.add("flipped");
-            flippedCards.push({ el, card });
+      function onCardClick(el, card) {
+        getCtx();
+        if (locked) return;
+        if (locked) return;
+        if (
+          el.classList.contains("flipped") ||
+          el.classList.contains("matched")
+        )
+          return;
+        if (flippedCards.length === 2) return;
 
-            if (flippedCards.length === 2) {
-              tries++;
+        el.classList.add("flipped");
+        flippedCards.push({ el, card });
 
-              locked = true;
-              const [a, b] = flippedCards;
-              if (a.card.pairId === b.card.pairId) {
-                setTimeout(() => {
-                  a.el.classList.add("matched");
-                  b.el.classList.add("matched");
-                  spawnSparkles(a.el);
-                  spawnSparkles(b.el);
-                  playMatchJingle();
-                  matches++;
+        if (flippedCards.length === 2) {
+          tries++;
 
-                  flippedCards = [];
-                  locked = false;
-                  if (matches === PAIRS.length) setTimeout(showWin, 600);
-                }, 350);
-              } else {
-                setTimeout(() => {
-                  a.el.classList.add("wrong");
-                  b.el.classList.add("wrong");
-                  playWrongSound();
-                }, 250);
-                setTimeout(() => {
-                  a.el.classList.remove("flipped", "wrong");
-                  b.el.classList.remove("flipped", "wrong");
-                  flippedCards = [];
-                  locked = false;
-                }, 1000);
-              }
-            }
+          locked = true;
+          const [a, b] = flippedCards;
+          if (a.card.pairId === b.card.pairId) {
+            setTimeout(() => {
+              a.el.classList.add("matched");
+              b.el.classList.add("matched");
+              spawnSparkles(a.el);
+              spawnSparkles(b.el);
+              playMatchJingle();
+              matches++;
+
+              flippedCards = [];
+              locked = false;
+              if (matches === PAIRS.length) setTimeout(showWin, 600);
+            }, 350);
+          } else {
+            setTimeout(() => {
+              a.el.classList.add("wrong");
+              b.el.classList.add("wrong");
+              playWrongSound();
+            }, 250);
+            setTimeout(() => {
+              a.el.classList.remove("flipped", "wrong");
+              b.el.classList.remove("flipped", "wrong");
+              flippedCards = [];
+              locked = false;
+            }, 1000);
           }
+        }
+      }
 
-          function spawnSparkles(el) {
-            const emojis = ["✨", "🌟", "🐚", "⭐"];
-            for (let i = 0; i < 5; i++) {
-              const s = document.createElement("div");
-              s.className = "sparkle";
-              s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-              const angle = Math.random() * Math.PI * 2;
-              const dist = 35 + Math.random() * 25;
-              s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
-              s.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
-              s.style.left = "50%";
-              s.style.top = "50%";
-              el.appendChild(s);
-              setTimeout(() => s.remove(), 950);
-            }
-          }
+      function spawnSparkles(el) {
+        const emojis = ["✨", "🌟", "🐚", "⭐"];
+        for (let i = 0; i < 5; i++) {
+          const s = document.createElement("div");
+          s.className = "sparkle";
+          s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 35 + Math.random() * 25;
+          s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+          s.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
+          s.style.left = "50%";
+          s.style.top = "50%";
+          el.appendChild(s);
+          setTimeout(() => s.remove(), 950);
+        }
+      }
 
-          function showWin() {
-            document.getElementById("winStats").textContent =
-              `You matched all ${PAIRS.length} pairs in ${tries} tries!`;
-            document.getElementById("overlay").classList.add("show");
-            playWinFanfare();
-          }
-          let voiceOn = true;
+      function showWin() {
+        document.getElementById("winStats").textContent =
+          `You matched all ${PAIRS.length} pairs in ${tries} tries!`;
+        document.getElementById("overlay").classList.add("show");
+        playWinFanfare();
+      }
+      let voiceOn = true;
 
-          function newGame() {
-            matches = 0;
-            tries = 0;
-            flippedCards = [];
-            locked = false;
+      function newGame() {
+        matches = 0;
+        tries = 0;
+        flippedCards = [];
+        locked = false;
 
-            document.getElementById("overlay").classList.remove("show");
-            deck = buildDeck();
-            render();
-          }
+        document.getElementById("overlay").classList.remove("show");
+        deck = buildDeck();
+        render();
+      }
 
-          document.getElementById("resetBtn").addEventListener("click", newGame);
-          document
-            .getElementById("playAgainBtn")
-            .addEventListener("click", newGame);
-          newGame();
+      document.getElementById("resetBtn").addEventListener("click", newGame);
+      document
+        .getElementById("playAgainBtn")
+        .addEventListener("click", newGame);
+      newGame();
     </script>
   </body>
 </html>
